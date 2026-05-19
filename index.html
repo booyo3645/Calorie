@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Калороо тооц миний хүүхдүүд</title>
+<title>Калорийн Тооцоолуур</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -690,6 +690,131 @@
 
   .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
 
+  /* ── MEAL PLAN ── */
+  .meal-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .meal-tab {
+    flex: 1;
+    padding: 9px 6px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: #faf8f6;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .meal-tab.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(232,93,38,0.3);
+  }
+
+  .meal-time {
+    margin-bottom: 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .meal-time-header {
+    background: linear-gradient(90deg, rgba(232,93,38,0.08), transparent);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .meal-time-icon { font-size: 1.3rem; }
+
+  .meal-time-name {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--text);
+    flex: 1;
+  }
+
+  .meal-time-kcal {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(232,93,38,0.1);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .food-list {
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .food-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    background: #faf8f6;
+    border-radius: 10px;
+  }
+
+  .food-emoji { font-size: 1.3rem; flex-shrink: 0; }
+
+  .food-info { flex: 1; }
+
+  .food-name {
+    font-size: 0.83rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .food-detail {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-weight: 600;
+    margin-top: 1px;
+  }
+
+  .food-kcal {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .meal-total {
+    padding: 8px 14px;
+    background: rgba(232,93,38,0.04);
+    border-top: 1px dashed var(--border);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .meal-tip {
+    background: rgba(42,157,143,0.07);
+    border: 1.5px solid rgba(42,157,143,0.2);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #2a9d8f;
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
   /* Watermark */
   .watermark {
     text-align: center;
@@ -708,7 +833,7 @@
       <span class="logo-icon">🔥</span>
       <h1>Калорийн Тооцоолуур</h1>
     </div>
-    <div class="header-sub">Өөрийнхөө мэдээллүүдийг бөгөл хүүхдүүдээ</div>
+    <div class="header-sub">Биеийн байдлаасаа хамаарсан өдрийн хэрэгцээт калорийг тооцоол</div>
   </div>
 </header>
 
@@ -764,12 +889,12 @@
 
   <!-- ACTIVITY -->
   <div class="card">
-    <div class="section-title">🏃 Хэр их хөдөлгөөний идэвхтэй вэ?</div>
+    <div class="section-title">🏃 Идэвхжлийн түвшин</div>
     <div class="activity-grid">
       <button class="act-btn" onclick="selectActivity(1.2, this)">
         <span class="btn-icon">🛋️</span>
         Суугаа
-        <br><span style="font-size:0.65rem; opacity:0.7">Дасгал хийдэггүй</span>
+        <br><span style="font-size:0.65rem; opacity:0.7">Дасгал бараг хийдэггүй</span>
       </button>
       <button class="act-btn active" onclick="selectActivity(1.375, this)">
         <span class="btn-icon">🚶</span>
@@ -804,7 +929,7 @@
       </button>
       <button class="goal-btn active-maintain" onclick="selectGoal('maintain', this)">
         <span class="btn-icon">⚖️</span>
-        Жингээ барих
+        Жин хадгалах
       </button>
       <button class="goal-btn" onclick="selectGoal('gain', this)">
         <span class="btn-icon">📈</span>
@@ -817,7 +942,7 @@
   <div>
     <button class="calc-btn" onclick="calculate()">
       <span class="btn-icon">🔢</span>
-      КАЛОРИ ТООЦООЛОХ
+      КАЛОРИ ТООЦООЛ
     </button>
     <div class="error-msg" id="errorMsg">
       <span>⚠️</span>
@@ -941,6 +1066,20 @@
     <div class="card" style="margin-bottom:0;">
       <div class="section-title">🏆 Зөвлөмж</div>
       <div id="adviceText" style="font-size:0.9rem; line-height:1.7; color:var(--muted); font-weight:600;"></div>
+    </div>
+
+    <!-- MEAL PLAN -->
+    <div class="card" style="margin-bottom:0;">
+      <div class="section-title">🍽️ Өдрийн хоолны төлөвлөгөө</div>
+
+      <!-- Meal tabs -->
+      <div class="meal-tabs">
+        <button class="meal-tab active" onclick="showMeal('lose2')">📉 Хасах</button>
+        <button class="meal-tab" onclick="showMeal('maintain2')">⚖️ Хадгалах</button>
+        <button class="meal-tab" onclick="showMeal('gain2')">📈 Нэмэх</button>
+      </div>
+
+      <div id="mealPlanContent"></div>
     </div>
 
     <button class="reset-btn" onclick="resetAll()">🔄 Дахин тооцоол</button>
@@ -1125,6 +1264,9 @@
 
     document.getElementById('adviceText').innerHTML = advice;
 
+    // Meal plan
+    renderMealPlan(lose, maintain, gain);
+
     // Show results
     document.getElementById('results').classList.add('visible');
     setTimeout(() => {
@@ -1140,10 +1282,322 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // ── MEAL PLAN ─────────────────────────────────
+  // Калорийн утга (100г тутамд ккал):
+  // Мах (дундаж турж мах): 150 ккал/100г → 1.50 ккал/г
+  // Өндөг: 1 ширхэг = 70 ккал
+  // Тараг (тосгүй): 60 ккал/100г → 0.60 ккал/г
+  // Цагаан будаа чанасан: 130 ккал/100г → 1.30 ккал/г
+  // Овьёос хуурай: 370 ккал/100г → 3.70 ккал/г (чанасан: ~1.50)
+  // Төмс чанасан: 77 ккал/100г → 0.77 ккал/г
+  // Лууван: 41 ккал/100г → 0.41 ккал/г
+  // Манжин: 43 ккал/100г → 0.43 ккал/г
+  // Нарийн ногоо (микс): 35 ккал/100г → 0.35 ккал/г
+  // Банана: 89 ккал/100г → 0.89 ккал/г
+  // Алим: 52 ккал/100г → 0.52 ккал/г
+  // Усан үзэм: 67 ккал/100г → 0.67 ккал/г
+
+  let mealKcal = { lose: 1600, maintain: 2000, gain: 2300 };
+  let activeMealGoal = 'maintain';
+
+  function buildMealPlan(kcal, goalType) {
+    // Зорилгын дагуу макро хуваарилалт
+    // Уураг: мах + өндөг гол эх үүсвэр
+    // Нүүрс: будаа + овьёос
+    // Ногоо: төмс, лууван, манжин, нарийн ногоо
+    // Жимс: банана, алим, усан үзэм
+    // Нэмэлт уураг: тараг (хааяа)
+
+    // Тухайн калорид тохирсон граммыг тооцох
+    // Зарчим: нийт ккал-ийн ~30% уураг, ~45% нүүрс, ~25% тос
+    // Мах = гол уураг (150ккал/100г), өндөг = нэмэлт (70ккал/ш)
+    // Будаа = гол нүүрс (130ккал/100г чанасан)
+
+    // Мах граммыг уургийн ккал-аар тооцно:
+    // Уургийн ккал = kcal * 0.30
+    // Мах 100г = 150ккал, 25г уураг
+    // Өндөг 1ш = 70ккал, 6г уураг
+    // Тараг 100г = 60ккал
+
+    const proteinKcal = kcal * 0.30;
+    const carbKcal    = kcal * 0.45;
+
+    // Өглөөний: өндөг + овьёос/будаа + жимс
+    // Өдрийн: мах + будаа + ногоо
+    // Оройн: мах + ногоо (будаа бага)
+    // Зууш: тараг эсвэл жимс
+
+    // Мах (өдрийн нийт) = уургийн ккал-ийн ~70% / 1.50
+    const meatG_total = Math.round((proteinKcal * 0.70) / 1.50);
+    // Өндөг = уургийн ккал-ийн ~30% / 70ккал/ш
+    const eggCount = Math.max(1, Math.round((proteinKcal * 0.30) / 70));
+
+    // Будаа нийт (чанасан) = нүүрсний ккал-ийн ~70% / 1.30
+    const riceG_total = Math.round((carbKcal * 0.70) / 1.30);
+    // Овьёос (хуурай) = нүүрсний ккал-ийн ~30% / 3.70
+    const oatG = Math.round((carbKcal * 0.30) / 3.70);
+
+    // Ногоо
+    const potatoG  = Math.round(80  * (kcal / 2000));  // Төмс
+    const carrotG  = Math.round(80  * (kcal / 2000));  // Лууван
+    const beetG    = Math.round(60  * (kcal / 2000));  // Манжин
+    const vegG     = Math.round(100 * (kcal / 2000));  // Нарийн ногоо
+
+    // Жимс
+    const bananaG  = Math.round(100 * (kcal / 2000));  // Банана ~1 ширхэг
+    const appleG   = Math.round(150 * (kcal / 2000));  // Алим ~1 ширхэг
+    const grapeG   = Math.round(80  * (kcal / 2000));  // Усан үзэм
+
+    // Тараг (хааяа)
+    const yogurtG  = Math.round(150 * (kcal / 2000));
+
+    // Мах хуваарилалт: өдрийн 60%, оройн 40%
+    const meatDay  = Math.round(meatG_total * 0.60);
+    const meatEve  = meatG_total - meatDay;
+
+    // Будаа хуваарилалт: өдрийн 60%, оройн 40%
+    const riceDay  = Math.round(riceG_total * 0.60);
+    const riceEve  = riceG_total - riceDay;
+
+    // Калори тооцоо
+    const kcalMeatDay  = Math.round(meatDay  * 1.50);
+    const kcalMeatEve  = Math.round(meatEve  * 1.50);
+    const kcalEgg      = eggCount * 70;
+    const kcalOat      = Math.round(oatG     * 3.70);
+    const kcalRiceDay  = Math.round(riceDay  * 1.30);
+    const kcalRiceEve  = Math.round(riceEve  * 1.30);
+    const kcalPotato   = Math.round(potatoG  * 0.77);
+    const kcalCarrot   = Math.round(carrotG  * 0.41);
+    const kcalBeet     = Math.round(beetG    * 0.43);
+    const kcalVeg      = Math.round(vegG     * 0.35);
+    const kcalBanana   = Math.round(bananaG  * 0.89);
+    const kcalApple    = Math.round(appleG   * 0.52);
+    const kcalGrape    = Math.round(grapeG   * 0.67);
+    const kcalYogurt   = Math.round(yogurtG  * 0.60);
+
+    // Нийт тооцсон калори
+    const totalCalc = kcalMeatDay + kcalMeatEve + kcalEgg + kcalOat +
+                      kcalRiceDay + kcalRiceEve + kcalPotato + kcalCarrot +
+                      kcalBeet + kcalVeg + kcalBanana + kcalApple + kcalYogurt;
+
+    // Зөвлөгөө текст зорилгоор
+    const tips = {
+      lose:     '💧 Хооллохоос 20 мин өмнө 1 аяга ус уугаарай. Мах, өндгөө буцалгаж идэж, тосгүй аргаар бэлд. Чихэр, чихэртэй ундаанаас зайлсхий.',
+      maintain: '⚖️ Өдөрт 3 удаа тогтмол цагт хооллоорой. Мах өндгөө уурагтай байлгаж, будааны хэмжээг тохируул.',
+      gain:     '💪 Өдөрт 4–5 удаа хуваан иднэ. Мах, өндгийн хэмжээг нэмэж, будаа, овьёосоор нүүрсний нөөцийг хангаарай.'
+    };
+
+    let html = '';
+
+    // ── ӨГЛӨӨНИЙ ХООЛ ──
+    const morn_total = kcalEgg + kcalOat + kcalBanana;
+    html += `
+      <div class="meal-time">
+        <div class="meal-time-header">
+          <span class="meal-time-icon">🌅</span>
+          <span class="meal-time-name">Өглөөний хоол</span>
+          <span class="meal-time-kcal">~${morn_total} ккал</span>
+        </div>
+        <div class="food-list">
+          <div class="food-item">
+            <span class="food-emoji">🥚</span>
+            <div class="food-info">
+              <div class="food-name">Өндөг</div>
+              <div class="food-detail">Чанасан · ${eggCount} ширхэг</div>
+            </div>
+            <div class="food-kcal">${kcalEgg} ккал</div>
+          </div>
+          <div class="food-item">
+            <span class="food-emoji">🌾</span>
+            <div class="food-info">
+              <div class="food-name">Овьёос</div>
+              <div class="food-detail">Хуурай · ${oatG}г → чанасан болгоно</div>
+            </div>
+            <div class="food-kcal">${kcalOat} ккал</div>
+          </div>
+          <div class="food-item">
+            <span class="food-emoji">🍌</span>
+            <div class="food-info">
+              <div class="food-name">Банана</div>
+              <div class="food-detail">${bananaG}г (~${Math.round(bananaG/100)} ширхэг)</div>
+            </div>
+            <div class="food-kcal">${kcalBanana} ккал</div>
+          </div>
+        </div>
+        <div class="meal-total">Нийт: ~${morn_total} ккал</div>
+      </div>`;
+
+    // ── ӨДРИЙН ХООЛ ──
+    const day_total = kcalMeatDay + kcalRiceDay + kcalCarrot + kcalBeet;
+    html += `
+      <div class="meal-time">
+        <div class="meal-time-header">
+          <span class="meal-time-icon">☀️</span>
+          <span class="meal-time-name">Өдрийн хоол</span>
+          <span class="meal-time-kcal">~${day_total} ккал</span>
+        </div>
+        <div class="food-list">
+          <div class="food-item">
+            <span class="food-emoji">🥩</span>
+            <div class="food-info">
+              <div class="food-name">Мах</div>
+              <div class="food-detail">Буцалгасан · ${meatDay}г</div>
+            </div>
+            <div class="food-kcal">${kcalMeatDay} ккал</div>
+          </div>
+          <div class="food-item">
+            <span class="food-emoji">🍚</span>
+            <div class="food-info">
+              <div class="food-name">Будаа</div>
+              <div class="food-detail">Чанасан · ${riceDay}г</div>
+            </div>
+            <div class="food-kcal">${kcalRiceDay} ккал</div>
+          </div>
+          <div class="food-item">
+            <span class="food-emoji">🥕</span>
+            <div class="food-info">
+              <div class="food-name">Лууван</div>
+              <div class="food-detail">Чанасан / түүхий · ${carrotG}г</div>
+            </div>
+            <div class="food-kcal">${kcalCarrot} ккал</div>
+          </div>
+          <div class="food-item">
+            <span class="food-emoji">🫛</span>
+            <div class="food-info">
+              <div class="food-name">Манжин</div>
+              <div class="food-detail">Чанасан · ${beetG}г</div>
+            </div>
+            <div class="food-kcal">${kcalBeet} ккал</div>
+          </div>
+        </div>
+        <div class="meal-total">Нийт: ~${day_total} ккал</div>
+      </div>`;
+
+    // ── ОРОЙН ХООЛ ──
+    const eve_total = kcalMeatEve + kcalRiceEve + kcalPotato + kcalVeg;
+    html += `
+      <div class="meal-time">
+        <div class="meal-time-header">
+          <span class="meal-time-icon">🌙</span>
+          <span class="meal-time-name">Оройн хоол</span>
+          <span class="meal-time-kcal">~${eve_total} ккал</span>
+        </div>
+        <div class="food-list">
+          <div class="food-item">
+            <span class="food-emoji">🥩</span>
+            <div class="food-info">
+              <div class="food-name">Мах</div>
+              <div class="food-detail">Буцалгасан · ${meatEve}г</div>
+            </div>
+            <div class="food-kcal">${kcalMeatEve} ккал</div>
+          </div>
+          <div class="food-item">
+            <span class="food-emoji">🍚</span>
+            <div class="food-info">
+              <div class="food-name">Будаа</div>
+              <div class="food-detail">Чанасан · ${riceEve}г</div>
+            </div>
+            <div class="food-kcal">${kcalRiceEve} ккал</div>
+          </div>
+          <div class="food-item">
+            <span class="food-emoji">🥔</span>
+            <div class="food-info">
+              <div class="food-name">Төмс</div>
+              <div class="food-detail">Буцалгасан · ${potatoG}г</div>
+            </div>
+            <div class="food-kcal">${kcalPotato} ккал</div>
+          </div>
+          <div class="food-item">
+            <span class="food-emoji">🥬</span>
+            <div class="food-info">
+              <div class="food-name">Нарийн ногоо</div>
+              <div class="food-detail">Чанасан/жигнэсэн · ${vegG}г</div>
+            </div>
+            <div class="food-kcal">${kcalVeg} ккал</div>
+          </div>
+        </div>
+        <div class="meal-total">Нийт: ~${eve_total} ккал</div>
+      </div>`;
+
+    // ── ЗУУШ ──
+    const snack_total = kcalYogurt + kcalApple + kcalGrape;
+    html += `
+      <div class="meal-time">
+        <div class="meal-time-header">
+          <span class="meal-time-icon">🍎</span>
+          <span class="meal-time-name">Завсрын зууш</span>
+          <span class="meal-time-kcal">~${snack_total} ккал</span>
+        </div>
+        <div class="food-list">
+          <div class="food-item">
+            <span class="food-emoji">🥛</span>
+            <div class="food-info">
+              <div class="food-name">Тараг</div>
+              <div class="food-detail">Тосгүй · ${yogurtG}г &nbsp;<span style="font-size:0.7rem;color:#e85d26">(нэмэлт уураг)</span></div>
+            </div>
+            <div class="food-kcal">${kcalYogurt} ккал</div>
+          </div>
+          <div class="food-item">
+            <span class="food-emoji">🍎</span>
+            <div class="food-info">
+              <div class="food-name">Алим</div>
+              <div class="food-detail">${appleG}г (~1 ширхэг)</div>
+            </div>
+            <div class="food-kcal">${kcalApple} ккал</div>
+          </div>
+          <div class="food-item">
+            <span class="food-emoji">🍇</span>
+            <div class="food-info">
+              <div class="food-name">Усан үзэм</div>
+              <div class="food-detail">${grapeG}г</div>
+            </div>
+            <div class="food-kcal">${kcalGrape} ккал</div>
+          </div>
+        </div>
+        <div class="meal-total">Нийт: ~${snack_total} ккал</div>
+      </div>`;
+
+    // Нийт дүн
+    const grandTotal = morn_total + day_total + eve_total + snack_total;
+    html += `
+      <div style="background:linear-gradient(135deg,rgba(232,93,38,0.08),rgba(42,157,143,0.08));border:1.5px solid rgba(232,93,38,0.2);border-radius:14px;padding:14px 16px;margin-top:4px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:0.8rem;font-weight:800;color:var(--text)">📊 Өдрийн нийт</span>
+          <span style="font-size:1.1rem;font-weight:900;color:var(--accent)">${grandTotal.toLocaleString()} ккал</span>
+        </div>
+        <div style="font-size:0.75rem;font-weight:700;color:var(--muted)">
+          Зорилтот: <b style="color:var(--accent)">${kcal.toLocaleString()} ккал</b> &nbsp;·&nbsp;
+          Зөрүү: <b style="color:${Math.abs(grandTotal-kcal)<100?'#2a9d8f':'#e85d26'}">${grandTotal>kcal?'+':''}${grandTotal-kcal} ккал</b>
+        </div>
+      </div>`;
+
+    html += `<div class="meal-tip">${tips[goalType]}</div>`;
+    return html;
+  }
+
+  function showMeal(tabGoal) {
+    activeMealGoal = tabGoal;
+    document.querySelectorAll('.meal-tab').forEach(t => t.classList.remove('active'));
+    event.target.classList.add('active');
+    const goalKey = tabGoal.replace('2','');
+    const kcal = mealKcal[goalKey] || 2000;
+    document.getElementById('mealPlanContent').innerHTML = buildMealPlan(kcal, goalKey);
+  }
+
+  function renderMealPlan(lose, maintain, gain) {
+    mealKcal = { lose, maintain, gain };
+    const goalKey = goal;
+    document.querySelectorAll('.meal-tab').forEach((t, i) => {
+      t.classList.remove('active');
+      if (['lose','maintain','gain'][i] === goalKey) t.classList.add('active');
+    });
+    document.getElementById('mealPlanContent').innerHTML = buildMealPlan(mealKcal[goalKey], goalKey);
+  }
+
   // Enter key
   document.addEventListener('keydown', e => {
     if (e.key === 'Enter') calculate();
   });
-</script>
+
 </body>
 </html>
