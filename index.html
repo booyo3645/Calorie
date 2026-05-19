@@ -1071,12 +1071,15 @@
     <!-- MEAL PLAN -->
     <div class="card" style="margin-bottom:0;">
       <div class="section-title">🍽️ Өдрийн хоолны төлөвлөгөө</div>
+      <div style="font-size:0.72rem;font-weight:700;color:var(--muted);background:rgba(42,157,143,0.06);border:1px solid rgba(42,157,143,0.15);border-radius:10px;padding:8px 12px;margin-bottom:12px;">
+        📌 Граммын тоо бүгд <b>түүхий жингээр</b> — хоолоо болгохоосоо өмнө жинлэнэ
+      </div>
 
       <!-- Meal tabs -->
       <div class="meal-tabs">
-        <button class="meal-tab active" onclick="showMeal('lose2')">📉 Хасах</button>
-        <button class="meal-tab" onclick="showMeal('maintain2')">⚖️ Хадгалах</button>
-        <button class="meal-tab" onclick="showMeal('gain2')">📈 Нэмэх</button>
+        <button class="meal-tab active" onclick="showMeal('lose2', this)">📉 Хасах</button>
+        <button class="meal-tab" onclick="showMeal('maintain2', this)">⚖️ Хадгалах</button>
+        <button class="meal-tab" onclick="showMeal('gain2', this)">📈 Нэмэх</button>
       </div>
 
       <div id="mealPlanContent"></div>
@@ -1322,63 +1325,63 @@
     const proteinKcal = kcal * 0.30;
     const carbKcal    = kcal * 0.45;
 
-    // Өглөөний: өндөг + овьёос/будаа + жимс
-    // Өдрийн: мах + будаа + ногоо
-    // Оройн: мах + ногоо (будаа бага)
-    // Зууш: тараг эсвэл жимс
+    // ── БҮГД ТҮҮХИЙ ЖИНГИЙН КАЛОРИ ────────────────────────────
+    const MEAT_KCAL = 1.20;  // Мах түүхий турж: 120 ккал/100г
+    const EGG_KCAL  = 70;    // Өндөг 1 ширхэг
+    const RICE_KCAL = 3.50;  // Будаа түүхий: 350 ккал/100г
+    const OAT_KCAL  = 3.70;  // Овьёос хуурай: 370 ккал/100г
+    const POT_KCAL  = 0.80;  // Төмс түүхий: 80 ккал/100г
+    const CAR_KCAL  = 0.41;  // Лууван түүхий: 41 ккал/100г
+    const BEET_KCAL = 0.43;  // Манжин түүхий: 43 ккал/100г
+    const VEG_KCAL  = 0.35;  // Нарийн ногоо: 35 ккал/100г
+    const BAN_KCAL  = 0.89;  // Банана: 89 ккал/100г
+    const APL_KCAL  = 0.52;  // Алим: 52 ккал/100г
+    const GRP_KCAL  = 0.67;  // Усан үзэм: 67 ккал/100г
+    const YOG_KCAL  = 0.60;  // Тараг тосгүй: 60 ккал/100г
 
-    // Мах (өдрийн нийт) = уургийн ккал-ийн ~70% / 1.50
-    const meatG_total = Math.round((proteinKcal * 0.70) / 1.50);
-    // Өндөг = уургийн ккал-ийн ~30% / 70ккал/ш
-    const eggCount = Math.max(1, Math.round((proteinKcal * 0.30) / 70));
+    // Мах (түүхий г) = уургийн ккал 70% / 1.20
+    const meatG_total = Math.round((proteinKcal * 0.70) / MEAT_KCAL);
+    // Өндөг = уургийн ккал 30% / 70
+    const eggCount    = Math.max(1, Math.round((proteinKcal * 0.30) / EGG_KCAL));
 
-    // Будаа нийт (чанасан) = нүүрсний ккал-ийн ~70% / 1.30
-    const riceG_total = Math.round((carbKcal * 0.70) / 1.30);
-    // Овьёос (хуурай) = нүүрсний ккал-ийн ~30% / 3.70
-    const oatG = Math.round((carbKcal * 0.30) / 3.70);
+    // Будаа түүхий г = нүүрсний ккал 70% / 3.50
+    const riceG_total = Math.round((carbKcal * 0.70) / RICE_KCAL);
+    // Овьёос хуурай г = нүүрсний ккал 30% / 3.70
+    const oatG        = Math.round((carbKcal * 0.30) / OAT_KCAL);
 
-    // Ногоо
-    const potatoG  = Math.round(80  * (kcal / 2000));  // Төмс
-    const carrotG  = Math.round(80  * (kcal / 2000));  // Лууван
-    const beetG    = Math.round(60  * (kcal / 2000));  // Манжин
-    const vegG     = Math.round(100 * (kcal / 2000));  // Нарийн ногоо
+    // Ногоо, жимс — түүхий грамм (2000ккал суурьтай)
+    const scale   = kcal / 2000;
+    const potatoG = Math.round(100 * scale);
+    const carrotG = Math.round(100 * scale);
+    const beetG   = Math.round(70  * scale);
+    const vegG    = Math.round(120 * scale);
+    const bananaG = Math.round(100 * scale);
+    const appleG  = Math.round(150 * scale);
+    const grapeG  = Math.round(80  * scale);
+    const yogurtG = Math.round(150 * scale);
 
-    // Жимс
-    const bananaG  = Math.round(100 * (kcal / 2000));  // Банана ~1 ширхэг
-    const appleG   = Math.round(150 * (kcal / 2000));  // Алим ~1 ширхэг
-    const grapeG   = Math.round(80  * (kcal / 2000));  // Усан үзэм
+    // Мах: өдөр 60%, орой 40%
+    const meatDay = Math.round(meatG_total * 0.60);
+    const meatEve = meatG_total - meatDay;
+    // Будаа: өдөр 60%, орой 40%
+    const riceDay = Math.round(riceG_total * 0.60);
+    const riceEve = riceG_total - riceDay;
 
-    // Тараг (хааяа)
-    const yogurtG  = Math.round(150 * (kcal / 2000));
-
-    // Мах хуваарилалт: өдрийн 60%, оройн 40%
-    const meatDay  = Math.round(meatG_total * 0.60);
-    const meatEve  = meatG_total - meatDay;
-
-    // Будаа хуваарилалт: өдрийн 60%, оройн 40%
-    const riceDay  = Math.round(riceG_total * 0.60);
-    const riceEve  = riceG_total - riceDay;
-
-    // Калори тооцоо
-    const kcalMeatDay  = Math.round(meatDay  * 1.50);
-    const kcalMeatEve  = Math.round(meatEve  * 1.50);
-    const kcalEgg      = eggCount * 70;
-    const kcalOat      = Math.round(oatG     * 3.70);
-    const kcalRiceDay  = Math.round(riceDay  * 1.30);
-    const kcalRiceEve  = Math.round(riceEve  * 1.30);
-    const kcalPotato   = Math.round(potatoG  * 0.77);
-    const kcalCarrot   = Math.round(carrotG  * 0.41);
-    const kcalBeet     = Math.round(beetG    * 0.43);
-    const kcalVeg      = Math.round(vegG     * 0.35);
-    const kcalBanana   = Math.round(bananaG  * 0.89);
-    const kcalApple    = Math.round(appleG   * 0.52);
-    const kcalGrape    = Math.round(grapeG   * 0.67);
-    const kcalYogurt   = Math.round(yogurtG  * 0.60);
-
-    // Нийт тооцсон калори
-    const totalCalc = kcalMeatDay + kcalMeatEve + kcalEgg + kcalOat +
-                      kcalRiceDay + kcalRiceEve + kcalPotato + kcalCarrot +
-                      kcalBeet + kcalVeg + kcalBanana + kcalApple + kcalYogurt;
+    // ── КАЛОРИ — бүгд түүхий жингийн утгаар ──
+    const kcalMeatDay = Math.round(meatDay  * MEAT_KCAL);
+    const kcalMeatEve = Math.round(meatEve  * MEAT_KCAL);
+    const kcalEgg     = eggCount * EGG_KCAL;
+    const kcalOat     = Math.round(oatG     * OAT_KCAL);
+    const kcalRiceDay = Math.round(riceDay  * RICE_KCAL);
+    const kcalRiceEve = Math.round(riceEve  * RICE_KCAL);
+    const kcalPotato  = Math.round(potatoG  * POT_KCAL);
+    const kcalCarrot  = Math.round(carrotG  * CAR_KCAL);
+    const kcalBeet    = Math.round(beetG    * BEET_KCAL);
+    const kcalVeg     = Math.round(vegG     * VEG_KCAL);
+    const kcalBanana  = Math.round(bananaG  * BAN_KCAL);
+    const kcalApple   = Math.round(appleG   * APL_KCAL);
+    const kcalGrape   = Math.round(grapeG   * GRP_KCAL);
+    const kcalYogurt  = Math.round(yogurtG  * YOG_KCAL);
 
     // Зөвлөгөө текст зорилгоор
     const tips = {
@@ -1403,7 +1406,7 @@
             <span class="food-emoji">🥚</span>
             <div class="food-info">
               <div class="food-name">Өндөг</div>
-              <div class="food-detail">Чанасан · ${eggCount} ширхэг</div>
+              <div class="food-detail">Болсон · ${eggCount} ширхэг</div>
             </div>
             <div class="food-kcal">${kcalEgg} ккал</div>
           </div>
@@ -1411,7 +1414,7 @@
             <span class="food-emoji">🌾</span>
             <div class="food-info">
               <div class="food-name">Овьёос</div>
-              <div class="food-detail">Хуурай · ${oatG}г → чанасан болгоно</div>
+              <div class="food-detail">Хуурай · ${oatG}г</div>
             </div>
             <div class="food-kcal">${kcalOat} ккал</div>
           </div>
@@ -1419,7 +1422,7 @@
             <span class="food-emoji">🍌</span>
             <div class="food-info">
               <div class="food-name">Банана</div>
-              <div class="food-detail">${bananaG}г (~${Math.round(bananaG/100)} ширхэг)</div>
+              <div class="food-detail">Түүхий · ${bananaG}г (~${Math.round(bananaG/100)} ширхэг)</div>
             </div>
             <div class="food-kcal">${kcalBanana} ккал</div>
           </div>
@@ -1441,7 +1444,7 @@
             <span class="food-emoji">🥩</span>
             <div class="food-info">
               <div class="food-name">Мах</div>
-              <div class="food-detail">Буцалгасан · ${meatDay}г</div>
+              <div class="food-detail">Түүхий · ${meatDay}г</div>
             </div>
             <div class="food-kcal">${kcalMeatDay} ккал</div>
           </div>
@@ -1449,7 +1452,7 @@
             <span class="food-emoji">🍚</span>
             <div class="food-info">
               <div class="food-name">Будаа</div>
-              <div class="food-detail">Чанасан · ${riceDay}г</div>
+              <div class="food-detail">Агшаагаагүй (түүхий) · ${riceDay}г</div>
             </div>
             <div class="food-kcal">${kcalRiceDay} ккал</div>
           </div>
@@ -1457,7 +1460,7 @@
             <span class="food-emoji">🥕</span>
             <div class="food-info">
               <div class="food-name">Лууван</div>
-              <div class="food-detail">Чанасан / түүхий · ${carrotG}г</div>
+              <div class="food-detail">Түүхий · ${carrotG}г</div>
             </div>
             <div class="food-kcal">${kcalCarrot} ккал</div>
           </div>
@@ -1465,7 +1468,7 @@
             <span class="food-emoji">🫛</span>
             <div class="food-info">
               <div class="food-name">Манжин</div>
-              <div class="food-detail">Чанасан · ${beetG}г</div>
+              <div class="food-detail">Түүхий · ${beetG}г</div>
             </div>
             <div class="food-kcal">${kcalBeet} ккал</div>
           </div>
@@ -1487,7 +1490,7 @@
             <span class="food-emoji">🥩</span>
             <div class="food-info">
               <div class="food-name">Мах</div>
-              <div class="food-detail">Буцалгасан · ${meatEve}г</div>
+              <div class="food-detail">Түүхий · ${meatEve}г</div>
             </div>
             <div class="food-kcal">${kcalMeatEve} ккал</div>
           </div>
@@ -1495,7 +1498,7 @@
             <span class="food-emoji">🍚</span>
             <div class="food-info">
               <div class="food-name">Будаа</div>
-              <div class="food-detail">Чанасан · ${riceEve}г</div>
+              <div class="food-detail">Агшаагаагүй (түүхий) · ${riceEve}г</div>
             </div>
             <div class="food-kcal">${kcalRiceEve} ккал</div>
           </div>
@@ -1503,7 +1506,7 @@
             <span class="food-emoji">🥔</span>
             <div class="food-info">
               <div class="food-name">Төмс</div>
-              <div class="food-detail">Буцалгасан · ${potatoG}г</div>
+              <div class="food-detail">Түүхий · ${potatoG}г</div>
             </div>
             <div class="food-kcal">${kcalPotato} ккал</div>
           </div>
@@ -1511,7 +1514,7 @@
             <span class="food-emoji">🥬</span>
             <div class="food-info">
               <div class="food-name">Нарийн ногоо</div>
-              <div class="food-detail">Чанасан/жигнэсэн · ${vegG}г</div>
+              <div class="food-detail">Түүхий · ${vegG}г</div>
             </div>
             <div class="food-kcal">${kcalVeg} ккал</div>
           </div>
@@ -1541,7 +1544,7 @@
             <span class="food-emoji">🍎</span>
             <div class="food-info">
               <div class="food-name">Алим</div>
-              <div class="food-detail">${appleG}г (~1 ширхэг)</div>
+              <div class="food-detail">Түүхий · ${appleG}г (~1 ширхэг)</div>
             </div>
             <div class="food-kcal">${kcalApple} ккал</div>
           </div>
@@ -1549,7 +1552,7 @@
             <span class="food-emoji">🍇</span>
             <div class="food-info">
               <div class="food-name">Усан үзэм</div>
-              <div class="food-detail">${grapeG}г</div>
+              <div class="food-detail">Түүхий · ${grapeG}г</div>
             </div>
             <div class="food-kcal">${kcalGrape} ккал</div>
           </div>
@@ -1575,10 +1578,10 @@
     return html;
   }
 
-  function showMeal(tabGoal) {
+  function showMeal(tabGoal, btn) {
     activeMealGoal = tabGoal;
     document.querySelectorAll('.meal-tab').forEach(t => t.classList.remove('active'));
-    event.target.classList.add('active');
+    if (btn) btn.classList.add('active');
     const goalKey = tabGoal.replace('2','');
     const kcal = mealKcal[goalKey] || 2000;
     document.getElementById('mealPlanContent').innerHTML = buildMealPlan(kcal, goalKey);
@@ -1599,5 +1602,6 @@
     if (e.key === 'Enter') calculate();
   });
 
+</script>
 </body>
 </html>
